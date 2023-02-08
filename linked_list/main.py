@@ -16,11 +16,146 @@ class Node:
 
 class LinkedList:
     """
-    Singly linked list
+    Singly linked list.
     """
 
     def __init__(self):
         self.head = None
+
+    def is_empty(self):
+        return self.head is None
+
+    def size(self):
+        """
+        Returns the number of nodes in the list.
+        Takes O(n) time.
+        """
+        current = self.head
+        count = 0
+
+        while current:
+            count += 1
+            current = current.next_node
+
+        return count
+
+    def add(self, data):
+        """
+        Adds a new Node containing data at the head of the list.
+        Takes O(1) time.
+        """
+        new_node = Node(data)
+        new_node.next_node = self.head
+        self.head = new_node
+
+    def search(self, key):
+        """
+        Search for the first node containing data that matches the key.
+        Returns the node or 'Node' if not found.
+        Takes O(n) time.
+        """
+
+        current = self.head
+
+        while current:
+            if current.data == key:
+                return current
+            else:
+                current = current.next_node
+        return None
+
+    def search_at_index(self, index):
+        """
+        Returns the Node at the index position.
+        Takes O(n) time.
+        """
+        current = self.head
+        position = index
+
+        if index == 0:
+            return current
+
+        if index > 0:
+            while position > 0:
+                current = current.next_node
+                position -= 1
+
+        return current
+
+    def insert(self, data, index):
+        """
+        Inserts a new Node containing data at index position.
+        Insertion takes O(1) time but finding the node at the
+        insertion point takes O(n) time.
+
+        Takes overall O(n) time.
+        """
+
+        if index == 0:
+            self.add(data)
+
+        if index > 0:
+            new_node = Node(data)
+
+            position = index
+            current = self.head
+
+            while position > 1:
+                current = current.next_node
+                position -= 1
+
+            prev_node = current
+            next_node = current.next_node
+
+            prev_node.next_node = new_node
+            new_node.next_node = next_node
+
+    def remove(self, key):
+        """
+        Removes nodes containing data that matches the key.
+        Returns the node or None if the key doesn't exist.
+        Takes O(n) time.
+        """
+
+        current = self.head
+        previous = None
+        found = False
+
+        while current and not found:
+            if current.data == key and current == self.head:
+                found = True
+                self.head = current.next_node
+            elif current.data == key:
+                found = True
+                previous.next_node = current.next_node
+            else:
+                previous = current
+                current = current.next_node
+
+        return current
+
+    def remove_at_index(self, index):
+        """
+        Removes the Node at index position.
+        Takes O(n) time.
+        """
+
+        current = self.head
+        position = index
+
+        if index == 0:
+            self.head = current.next_node
+            return current
+
+        while position > 1:
+            current = current.next_node
+            position -= 1
+
+        previous_node = current
+        removed_node = current.next_node
+        previous_node.next_node = removed_node.next_node
+
+        return removed_node
 
     def __repr__(self):
         """
@@ -41,29 +176,3 @@ class LinkedList:
             current = current.next_node
 
         return ' -> '.join(nodes)
-
-    def is_empty(self):
-        return self.head is None
-
-    def size(self):
-        """
-        Returns the number of nodes in the list
-        Takes O(n) time
-        """
-        current = self.head
-        count = 0
-
-        while current:
-            count += 1
-            current = current.next_node
-
-        return count
-
-    def add(self, data):
-        """
-        Adds a new Node containing data at the head of the list.
-        Takes O(1) time
-        """
-        new_node = Node(data)
-        new_node.next_node = self.head
-        self.head = new_node

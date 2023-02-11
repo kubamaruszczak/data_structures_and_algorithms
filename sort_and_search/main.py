@@ -1,8 +1,19 @@
 import random
-
+from datetime import datetime
 from names import names_list
 
 
+def execution_time(function):
+    def wrapper(*args, **kwargs):
+        before = datetime.now()
+        result = function(*args, **kwargs)
+        after = datetime.now()
+        print(f'{function.__name__}() runtime: {(after - before).total_seconds()} s')
+        return result
+    return wrapper
+
+
+@execution_time
 def linear_search(collection, target):
     for i in range(len(collection)):
         if target == collection[i]:
@@ -10,6 +21,7 @@ def linear_search(collection, target):
     return None
 
 
+@execution_time
 def binary_search(collection, target):
     first = 0
     last = len(collection) - 1
